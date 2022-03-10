@@ -14,10 +14,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 button {
-  width: 16%;
+  width: 50%;
   border: none;
   background: #3e73c1;
   padding: 10px;
   color: white;
+  position: inherit;
 }
 </style>

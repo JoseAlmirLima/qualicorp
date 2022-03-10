@@ -3,9 +3,14 @@
     <div>
       <NavBar />
     </div>
-    <div>
-      <Form />
-    </div>
+    <main class="container-fluid">
+      <div class="row">
+        <section class="col-6">
+          <Form />
+        </section>
+      </div>
+    </main>
+    <div></div>
   </div>
 </template>
 
