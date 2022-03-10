@@ -68,8 +68,8 @@ export default {
   },
   methods: {
     teste(e) {
-      this.$emit("estadoValor", e.target.value);
-      console.log(e.target.value);
+      this.$emit("selectValor", e.target.value);
+      this.$emit("valorCidade", e.target.value);
     },
   },
 };

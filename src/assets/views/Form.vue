@@ -7,13 +7,17 @@
           <SelectVue
             v-model="estado"
             :dados="estados"
-            @estado-valor="teste"
+            @select-valor="getValorEstado"
             :estado="true"
           />
         </div>
         <div class="col-6 mt-3">
           <label for="">Qual sua cidade?</label>
-          <SelectVue :dados="cidades" :estado="false" />
+          <SelectVue
+            :dados="cidades"
+            :estado="false"
+            @valor-cidade="getValorCidade"
+          />
         </div>
         <div class="col-6 mt-3">
           <InputVue />
@@ -27,7 +31,11 @@
       </div>
       <div class="row mt-3">
         <div class="d-flex justify-content-center">
-          <ButtonVue />
+          <ButtonVue
+            @click="proximaEtapa"
+            :disabled="true"
+            :class="{ active: true }"
+          />
         </div>
       </div>
     </form>
@@ -54,8 +62,8 @@ export default {
     return {
       apiListar: "api/cadastros/Lojas/GetList",
       cidades: [],
-      estado: null,
-      cidade: null,
+      estado: "",
+      cidade: "",
       estados: [
         { value: null, text: "Selecione um estado" },
         { value: "AC", text: "Acre" },
@@ -89,21 +97,23 @@ export default {
     };
   },
   methods: {
-    teste(e) {
-      console.log("aquii");
-      console.log(e);
-      this.cidades = cidades[e].cidades;
-      console.log(this.cidades);
+    getValorEstado(valor) {
+      this.estado = valor;
+      this.cidades = cidades[valor].cidades;
+    },
+    getValorCidade(valor) {
+      this.cidade = valor;
+      this.cidades = cidades[valor].cidades;
+    },
+    proximaEtapa() {
+      API.BuscarProfissoes(this.estado, this.cidade);
     },
   },
 
-  mounted() {
-    API.BuscarProfissoes("SP", "SAO PAULO");
-  },
+  mounted() {},
   watch: {
     estado: function () {
-      this.cidades = cidades[this.estado].cidades;
-      console.log(this.cidades);
+      console.log("kk");
     },
   },
 };
@@ -120,5 +130,8 @@ form {
 label {
   display: flex;
   margin-bottom: 8px;
+}
+.active {
+  background-color: rgb(207, 207, 207);
 }
 </style>
