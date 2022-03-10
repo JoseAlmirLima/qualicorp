@@ -1,7 +1,24 @@
 <template>
-  <select name="select" class="w-100" @change="teste" :value="dados">
+  <select
+    v-if="estado"
+    name="select"
+    class="w-100"
+    @change="teste"
+    :value="dados"
+  >
     <option v-for="(dados, item) in dados" :key="item">
       {{ dados.value }}
+    </option>
+  </select>
+  <select
+    v-if="!estado"
+    name="select"
+    class="w-100"
+    @change="teste"
+    :value="dados"
+  >
+    <option v-for="(dados, item) in dados" :key="item">
+      {{ dados }}
     </option>
   </select>
 </template>
@@ -11,6 +28,7 @@ export default {
   name: "SelectVue",
   props: {
     dados: Array,
+    estado: Boolean,
   },
 
   data: function () {

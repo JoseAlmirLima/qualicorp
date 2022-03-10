@@ -4,11 +4,16 @@
       <div class="row">
         <div class="col-6 mt-3">
           <label for="">Qual seu estado?</label>
-          <SelectVue v-model="estado" :dados="estados" @estado-valor="teste" />
+          <SelectVue
+            v-model="estado"
+            :dados="estados"
+            @estado-valor="teste"
+            :estado="true"
+          />
         </div>
         <div class="col-6 mt-3">
           <label for="">Qual sua cidade?</label>
-          <SelectVue />
+          <SelectVue :dados="cidades" :estado="false" />
         </div>
         <div class="col-6 mt-3">
           <InputVue />
@@ -87,6 +92,8 @@ export default {
     teste(e) {
       console.log("aquii");
       console.log(e);
+      this.cidades = cidades[e].cidades;
+      console.log(this.cidades);
     },
   },
 
