@@ -5,7 +5,6 @@
         <div class="col-6 mt-3">
           <label for="">Qual seu estado?</label>
           <SelectVue
-            v-model="estado"
             :dados="estados"
             @select-valor="getValorEstado"
             :estado="true"
@@ -106,14 +105,16 @@ export default {
       this.cidades = cidades[valor].cidades;
     },
     proximaEtapa() {
-      API.BuscarProfissoes(this.estado, this.cidade);
+      if (this.estado !== "" && this.estado !== "") {
+        API.BuscarProfissoes(this.estado, this.cidade);
+      }
     },
   },
 
   mounted() {},
   watch: {
     estado: function () {
-      console.log("kk");
+      console.log(this.estado);
     },
   },
 };
