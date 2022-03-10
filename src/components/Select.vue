@@ -1,7 +1,7 @@
 <template>
-  <select name="select" class="w-100">
-    <option v-for="(estados, item) in estados" :key="item">
-      {{ estados.value }}
+  <select name="select" class="w-100" @change="teste" :value="dados">
+    <option v-for="(dados, item) in dados" :key="item">
+      {{ dados.value }}
     </option>
   </select>
 </template>
@@ -10,7 +10,7 @@
 export default {
   name: "SelectVue",
   props: {
-    valor: String,
+    dados: Array,
   },
 
   data: function () {
@@ -47,6 +47,12 @@ export default {
         { value: "TO", text: "Tocantins" },
       ],
     };
+  },
+  methods: {
+    teste(e) {
+      this.$emit("estadoValor", e.target.value);
+      console.log(e.target.value);
+    },
   },
 };
 </script>

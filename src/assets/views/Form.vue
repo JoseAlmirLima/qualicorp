@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-6 mt-3">
           <label for="">Qual seu estado?</label>
-          <SelectVue />
+          <SelectVue v-model="estado" :dados="estados" @estado-valor="teste" />
         </div>
         <div class="col-6 mt-3">
           <label for="">Qual sua cidade?</label>
@@ -31,6 +31,7 @@
 
 <script>
 import API from "../../api/api.js";
+import cidades from "../../services/cidades.json";
 import InputVue from "../../components/Input.vue";
 import SelectVue from "../../components/Select.vue";
 import ButtonVue from "../../components/Button.vue";
@@ -47,6 +48,9 @@ export default {
   data: function () {
     return {
       apiListar: "api/cadastros/Lojas/GetList",
+      cidades: [],
+      estado: null,
+      cidade: null,
       estados: [
         { value: null, text: "Selecione um estado" },
         { value: "AC", text: "Acre" },
@@ -79,9 +83,21 @@ export default {
       ],
     };
   },
+  methods: {
+    teste(e) {
+      console.log("aquii");
+      console.log(e);
+    },
+  },
 
   mounted() {
     API.BuscarProfissoes("SP", "SAO PAULO");
+  },
+  watch: {
+    estado: function () {
+      this.cidades = cidades[this.estado].cidades;
+      console.log(this.cidades);
+    },
   },
 };
 </script>
