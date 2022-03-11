@@ -1,59 +1,70 @@
 <template>
   <section class="container">
-    <form class="mt-5">
-      <div class="row">
-        <div v-if="!exibirProfissao" class="col-6 mt-3">
-          <label for="estado">Qual o seu estado?</label>
-          <SelectVue
-            id="estado"
-            :dados="estados"
-            @select-valor="getValorEstado"
-            :estado="true"
-          />
+    <div class="row">
+      <form class="mt-5">
+        <div v-if="exibirMsgSucesso" class="dadosEnviados">
+          <i class="fa fa-check" aria-hidden="true"></i>
+          <p>Dados enviados, clique no botão para ver sua cotação!</p>
         </div>
-        <div v-if="!exibirProfissao" class="col-6 mt-3">
-          <label for="cidade">Qual a sua cidade?</label>
-          <SelectVue
-            id="cidade"
-            :dados="cidades"
-            :estado="false"
-            @valor-cidade="getValorCidade"
-            :isDisabled="bloquearCidade"
-          />
-        </div>
-        <div v-if="exibirProfissao" class="col-6 mt-3">
-          <label for="profissao">Qual a sua formação ou cargo?</label>
-          <SelectVue
-            id="profissao"
-            :dados="profissoes"
-            :profissao="true"
-            @valor-profissao="getValorProfissao"
-          />
-        </div>
-        <div v-if="!exibirProfissao" class="col-6 mt-3">
-          <label for="date">Data de nascimento</label>
-          <input
-            id="date"
-            type="date"
-            v-model="formBody.datanascimento[0]"
-            class="inputData"
-          />
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-12">
-          <div class="d-flex justify-content-end">
-            <ButtonVue
-              @click="proximaEtapa"
-              :disabled="disabledButton"
-              :class="{ active: disabledButton }"
+
+        <div class="row">
+          <div v-if="exibirEstado" class="col-lg-6 col-sm-12 mt-3">
+            <label for="estado">Qual o seu estado?</label>
+            <SelectVue
+              id="estado"
+              :dados="estados"
+              @select-valor="getValorEstado"
+              :estado="true"
+            />
+          </div>
+          <div v-if="exibirEstado" class="col-lg-6 col-sm-12 mt-3">
+            <label for="cidade">Qual a sua cidade?</label>
+            <SelectVue
+              id="cidade"
+              :dados="cidades"
+              :estado="false"
+              @valor-cidade="getValorCidade"
+              :isDisabled="bloquearCidade"
+            />
+          </div>
+          <div v-if="exibirProfissao" class="col-lg-6 col-sm-12 mt-3">
+            <label for="profissao">Qual a sua formação ou cargo?</label>
+            <SelectVue
+              id="profissao"
+              :dados="profissoes"
+              :profissao="true"
+              @valor-profissao="getValorProfissao"
+            />
+          </div>
+          <div v-if="exibirEstado" class="col-lg-6 col-sm-12 mt-3">
+            <label for="date">Data de nascimento</label>
+            <input
+              id="date"
+              type="date"
+              v-model="formBody.datanascimento[0]"
+              class="inputData"
             />
           </div>
         </div>
-      </div>
-    </form>
-    <div class="row">
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="d-flex justify-content-end">
+              <ButtonVue
+                @click="proximaEtapa"
+                :disabled="disabledButton"
+                :texto="textoButton"
+                :class="{
+                  active: disabledButton,
+                }"
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div v-if="exibirTable" class="row mt-5">
       <div class="col-12">
+        <h1>Resultado cotação</h1>
         <table class="table">
           <thead class="thead-dark">
             <tr>
@@ -107,11 +118,15 @@ export default {
       primeiraEtapa: 1,
       cidades: [],
       profissoes: [],
+      textoButton: "Próximo",
       entidade: "",
       profissao: "",
       estado: "",
       cidade: "",
       exibirProfissao: false,
+      exibirMsgSucesso: false,
+      exibirTable: false,
+      exibirEstado: true,
       dadosCotacao: "",
       formBody: {
         entidade: "",
@@ -167,11 +182,11 @@ export default {
     proximaEtapa(e) {
       e.preventDefault();
       if (this.primeiraEtapa === 1) {
-        console.log(this.formBody);
         if (this.estado !== "" && this.cidade !== "") {
           API.BuscarProfissoes(this.estado, this.cidade).then((response) => {
             console.log(response.data);
             this.exibirProfissao = true;
+            this.exibirEstado = false;
             this.profissoes = response.data;
             this.primeiraEtapa = 2;
           });
@@ -180,20 +195,24 @@ export default {
       if (this.primeiraEtapa === 2) {
         API.BuscarEntidades(this.profissao, this.estado, this.cidade).then(
           (response) => {
-            console.log(response.data);
             this.exibirProfissao = false;
             this.primeiraEtapa = 3;
             this.entidade = response.data[0].NomeFantasia;
             this.formBody.entidade = this.entidade;
             this.formBody.uf = this.estado;
             this.formBody.cidade = this.cidade;
+            this.textoButton = "Realizar cotação";
+            this.exibirMsgSucesso = true;
           }
         );
       }
       if (this.primeiraEtapa === 3) {
         API.FazerCotacao(this.formBody).then((response) => {
-          console.log(response);
           this.dadosCotacao = response.data.planos;
+          this.exibirEstado = true;
+          this.textoButton = "Próximo";
+          this.exibirTable = true;
+          this.exibirMsgSucesso = false;
         });
       }
     },
@@ -248,5 +267,13 @@ input {
   border-radius: 8px;
   outline: none;
   width: 100%;
+}
+.dadosEnviados {
+  font-size: 70px;
+  color: green;
+}
+.dadosEnviados p {
+  font-size: 16px;
+  color: rgb(31, 31, 31);
 }
 </style>

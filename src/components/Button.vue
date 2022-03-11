@@ -1,6 +1,6 @@
 <template>
   <button>
-    {{ texto }} <i class="fa fa-arrow-right ml-2" aria-hidden="true"></i>
+    {{ texto }}
   </button>
 </template>
 

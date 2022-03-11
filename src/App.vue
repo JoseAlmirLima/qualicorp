@@ -5,14 +5,14 @@
     </div>
     <main class="container-fluid">
       <div class="row">
-        <section class="col-lg-8 col-sm-12">
+        <section class="col-lg-12 col-sm-12">
           <h1 class="mt-5">Faça sua cotação com a gente!</h1>
           <h4>E aproveite todos nossos beneficios</h4>
           <p>Informe os dados abaixo e confira!</p>
 
           <Form />
         </section>
-        <section class="col-lg-4 col-sm-12 mt-5">
+        <section class="col-lg-12 col-sm-12 mt-5">
           <article class="imgFamilia">
             <img
               src="./assets/img/familia.jpg"
@@ -23,7 +23,10 @@
         </section>
       </div>
     </main>
-    <div></div>
+    <footer>
+      <p>Autor: José almir da silva lima</p>
+      <p><a href="josealmirsla@gmail.com">josealmirsla@gmail.com</a></p>
+    </footer>
   </div>
 </template>
 
@@ -52,5 +55,10 @@ export default {
 .imgFamilia {
   padding: 20px;
   box-shadow: 0px 0px 26px 6px rgb(0 0 0 / 8%);
+}
+footer {
+  background: rgb(126, 126, 126);
+  padding: 35px;
+  color: #fefefe;
 }
 </style>
