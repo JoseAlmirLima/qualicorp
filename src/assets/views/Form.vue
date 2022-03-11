@@ -49,6 +49,32 @@
         </div>
       </div>
     </form>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Plano</th>
+          <th scope="col">Segmentação</th>
+          <th scope="col">Tipo Acomodação</th>
+          <th scope="col">Preço</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="(dadosCotacao, item) in dadosCotacao" :key="item">
+          <td>{{ dadosCotacao.nome_plano_ans }}</td>
+          <td>{{ dadosCotacao.segmentacao }}</td>
+          <td>{{ dadosCotacao.tipo_acomodacao }}</td>
+          <td>
+            {{
+              new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              }).format(dadosCotacao.precos.total)
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 </template>
 
@@ -79,6 +105,7 @@ export default {
       estado: "",
       cidade: "",
       exibirProfissao: false,
+      dadosCotacao: "",
       formBody: {
         entidade: "",
         uf: "",
@@ -159,6 +186,7 @@ export default {
       if (this.primeiraEtapa === 3) {
         API.FazerCotacao(this.formBody).then((response) => {
           console.log(response);
+          this.dadosCotacao = response.data.planos;
         });
       }
     },
