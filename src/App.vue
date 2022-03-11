@@ -24,7 +24,7 @@
       </div>
     </main>
     <footer>
-      <p>Autor: José almir da silva lima</p>
+      <p>Autor: José almir da silva lima.</p>
       <p><a href="josealmirsla@gmail.com">josealmirsla@gmail.com</a></p>
     </footer>
   </div>
