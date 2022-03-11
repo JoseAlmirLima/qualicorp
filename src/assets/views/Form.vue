@@ -63,7 +63,7 @@
       </form>
     </div>
     <div v-if="exibirTable" class="row mt-5">
-      <div class="col-12">
+      <div class="col-12 table-responsive">
         <h1>Resultado cotação</h1>
         <table class="table">
           <thead class="thead-dark">
@@ -184,7 +184,6 @@ export default {
       if (this.primeiraEtapa === 1) {
         if (this.estado !== "" && this.cidade !== "") {
           API.BuscarProfissoes(this.estado, this.cidade).then((response) => {
-            console.log(response.data);
             this.exibirProfissao = true;
             this.exibirEstado = false;
             this.profissoes = response.data;
@@ -237,8 +236,6 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 form {
   padding: 21px;
