@@ -68,8 +68,10 @@ export default {
     return {
       bloquearCidade: true,
       disabledButton: true,
+      primeiraEtapa: true,
       cidades: [],
       profissoes: [],
+      profissao: "",
       estado: "",
       cidade: "",
       exibirProfissao: false,
@@ -114,15 +116,28 @@ export default {
     getValorCidade(valor) {
       this.cidade = valor;
     },
+    getValorProfissao(valor) {
+      this.profissao = valor;
+    },
     proximaEtapa(e) {
       e.preventDefault();
-      console.log(this.estado, this.cidade);
-      if (this.estado !== "" && this.cidade !== "") {
-        API.BuscarProfissoes(this.estado, this.cidade).then((response) => {
-          console.log(response.data);
-          this.exibirProfissao = true;
-          this.profissoes = response.data;
-        });
+      if (this.primeiraEtapa) {
+        if (this.estado !== "" && this.cidade !== "") {
+          API.BuscarProfissoes(this.estado, this.cidade).then((response) => {
+            console.log(response.data);
+            this.exibirProfissao = true;
+            this.profissoes = response.data;
+            this.primeiraEtapa = false;
+          });
+        } else {
+          API.BuscarEntidades(this.profissao, this.estado, this.cidade).then(
+            (response) => {
+              console.log(response.data);
+              this.exibirProfissao = true;
+              this.profissoes = response.data;
+            }
+          );
+        }
       }
     },
   },
