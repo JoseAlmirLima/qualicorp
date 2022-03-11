@@ -1,26 +1,41 @@
 <template>
-  <select
-    v-if="estado"
-    name="select"
-    class="w-100"
-    @change="teste"
-    :value="dados"
-  >
-    <option v-for="(dados, item) in dados" :key="item">
-      {{ dados.value }}
-    </option>
-  </select>
-  <select
-    v-if="!estado"
-    name="select"
-    class="w-100"
-    @change="teste"
-    :value="dados"
-  >
-    <option v-for="(dados, item) in dados" :key="item">
-      {{ dados }}
-    </option>
-  </select>
+  <div>
+    <select
+      v-if="estado"
+      name="select"
+      class="w-100"
+      @change="teste"
+      :value="dados"
+    >
+      <option v-for="(dados, item) in dados" :key="item">
+        {{ dados.value }}
+      </option>
+    </select>
+    <select
+      v-if="!estado && profissao === false"
+      name="select"
+      class="w-100"
+      @change="teste"
+      :value="dados"
+      :disabled="isDisabled"
+      :class="{ active: isDisabled }"
+    >
+      <option v-for="(dados, item) in dados" :key="item">
+        {{ dados }}
+      </option>
+    </select>
+    <select
+      v-if="profissao"
+      name="select"
+      class="w-100"
+      @change="teste"
+      :value="dados"
+    >
+      <option v-for="(dados, item) in dados" :key="item">
+        {{ dados.profissao }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script>
@@ -29,6 +44,14 @@ export default {
   props: {
     dados: Array,
     estado: Boolean,
+    profissao: {
+      type: Boolean,
+      default: false,
+    },
+    isDisabled: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   data: function () {
@@ -82,5 +105,8 @@ select {
   padding: 8px;
   border-radius: 8px;
   outline: none;
+}
+.active {
+  background-color: rgb(247 247 247);
 }
 </style>

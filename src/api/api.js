@@ -11,4 +11,14 @@ export default {
       }
     );
   },
+  BuscarEntidades: (profissao, estado, cidade) => {
+    return http.get(
+      `entidade/${profissao}/${estado}/${cidade}?api-key=a94736bc-2c54-4805-859e-3592dbeae88d`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  },
 };

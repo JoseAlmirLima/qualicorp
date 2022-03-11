@@ -1,5 +1,5 @@
 <template>
-  <button>Fazer cotação</button>
+  <button>Próximo</button>
 </template>
 
 <script>
@@ -14,7 +14,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 button {
-  width: 50%;
   border: none;
   background: #3e73c1;
   padding: 10px;

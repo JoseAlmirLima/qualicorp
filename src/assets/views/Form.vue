@@ -2,7 +2,7 @@
   <section class="container">
     <form class="mt-5">
       <div class="row">
-        <div class="col-6 mt-3">
+        <div v-if="!exibirProfissao" class="col-6 mt-3">
           <label for="">Qual seu estado?</label>
           <SelectVue
             :dados="estados"
@@ -10,13 +10,18 @@
             :estado="true"
           />
         </div>
-        <div class="col-6 mt-3">
+        <div v-if="!exibirProfissao" class="col-6 mt-3">
           <label for="">Qual sua cidade?</label>
           <SelectVue
             :dados="cidades"
             :estado="false"
             @valor-cidade="getValorCidade"
+            :isDisabled="bloquearCidade"
           />
+        </div>
+        <div v-if="exibirProfissao" class="col-6 mt-3">
+          <label for="">Qual a sua formação ou cargo?</label>
+          <SelectVue :dados="profissoes" :profissao="true" />
         </div>
         <div class="col-6 mt-3">
           <InputVue />
@@ -29,12 +34,14 @@
         </div>
       </div>
       <div class="row mt-3">
-        <div class="d-flex justify-content-center">
-          <ButtonVue
-            @click="proximaEtapa"
-            :disabled="true"
-            :class="{ active: true }"
-          />
+        <div class="col-12">
+          <div class="d-flex justify-content-end">
+            <ButtonVue
+              @click="proximaEtapa"
+              :disabled="disabledButton"
+              :class="{ active: disabledButton }"
+            />
+          </div>
         </div>
       </div>
     </form>
@@ -59,12 +66,14 @@ export default {
   },
   data: function () {
     return {
-      apiListar: "api/cadastros/Lojas/GetList",
+      bloquearCidade: true,
+      disabledButton: true,
       cidades: [],
+      profissoes: [],
       estado: "",
       cidade: "",
+      exibirProfissao: false,
       estados: [
-        { value: null, text: "Selecione um estado" },
         { value: "AC", text: "Acre" },
         { value: "AL", text: "Alagoas" },
         { value: "AP", text: "Amapá" },
@@ -99,14 +108,21 @@ export default {
     getValorEstado(valor) {
       this.estado = valor;
       this.cidades = cidades[valor].cidades;
+      this.bloquearCidade = false;
+      this.cidade = "";
     },
     getValorCidade(valor) {
       this.cidade = valor;
-      this.cidades = cidades[valor].cidades;
     },
-    proximaEtapa() {
-      if (this.estado !== "" && this.estado !== "") {
-        API.BuscarProfissoes(this.estado, this.cidade);
+    proximaEtapa(e) {
+      e.preventDefault();
+      console.log(this.estado, this.cidade);
+      if (this.estado !== "" && this.cidade !== "") {
+        API.BuscarProfissoes(this.estado, this.cidade).then((response) => {
+          console.log(response.data);
+          this.exibirProfissao = true;
+          this.profissoes = response.data;
+        });
       }
     },
   },
@@ -114,7 +130,18 @@ export default {
   mounted() {},
   watch: {
     estado: function () {
-      console.log(this.estado);
+      if (this.estado !== "" && this.cidade !== "") {
+        this.disabledButton = false;
+      } else {
+        this.disabledButton = true;
+      }
+    },
+    cidade: function () {
+      if (this.estado !== "" && this.cidade !== "") {
+        this.disabledButton = false;
+      } else {
+        this.disabledButton = true;
+      }
     },
   },
 };
@@ -134,5 +161,13 @@ label {
 }
 .active {
   background-color: rgb(207, 207, 207);
+}
+.textoError {
+  font-size: 14px;
+  color: red;
+}
+.borderError {
+  border: 1px solid red;
+  border-radius: 10px;
 }
 </style>
