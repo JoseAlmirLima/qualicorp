@@ -3,16 +3,18 @@
     <form class="mt-5">
       <div class="row">
         <div v-if="!exibirProfissao" class="col-6 mt-3">
-          <label for="">Qual seu estado?</label>
+          <label for="estado">Qual o seu estado?</label>
           <SelectVue
+            id="estado"
             :dados="estados"
             @select-valor="getValorEstado"
             :estado="true"
           />
         </div>
         <div v-if="!exibirProfissao" class="col-6 mt-3">
-          <label for="">Qual sua cidade?</label>
+          <label for="cidade">Qual a sua cidade?</label>
           <SelectVue
+            id="cidade"
             :dados="cidades"
             :estado="false"
             @valor-cidade="getValorCidade"
@@ -20,15 +22,16 @@
           />
         </div>
         <div v-if="exibirProfissao" class="col-6 mt-3">
-          <label for="">Qual a sua formação ou cargo?</label>
+          <label for="profissao">Qual a sua formação ou cargo?</label>
           <SelectVue
+            id="profissao"
             :dados="profissoes"
             :profissao="true"
             @valor-profissao="getValorProfissao"
           />
         </div>
         <div v-if="!exibirProfissao" class="col-6 mt-3">
-          <label for="">Data de nascimento</label>
+          <label for="date">Data de nascimento</label>
           <input
             id="date"
             type="date"
@@ -49,32 +52,36 @@
         </div>
       </div>
     </form>
-    <table class="table">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Plano</th>
-          <th scope="col">Segmentação</th>
-          <th scope="col">Tipo Acomodação</th>
-          <th scope="col">Preço</th>
-        </tr>
-      </thead>
+    <div class="row">
+      <div class="col-12">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Plano</th>
+              <th scope="col">Segmentação</th>
+              <th scope="col">Tipo Acomodação</th>
+              <th scope="col">Preço</th>
+            </tr>
+          </thead>
 
-      <tbody>
-        <tr v-for="(dadosCotacao, item) in dadosCotacao" :key="item">
-          <td>{{ dadosCotacao.nome_plano_ans }}</td>
-          <td>{{ dadosCotacao.segmentacao }}</td>
-          <td>{{ dadosCotacao.tipo_acomodacao }}</td>
-          <td>
-            {{
-              new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(dadosCotacao.precos.total)
-            }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <tbody>
+            <tr v-for="(dadosCotacao, item) in dadosCotacao" :key="item">
+              <td>{{ dadosCotacao.nome_plano_ans }}</td>
+              <td>{{ dadosCotacao.segmentacao }}</td>
+              <td>{{ dadosCotacao.tipo_acomodacao }}</td>
+              <td>
+                {{
+                  new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(dadosCotacao.precos.total)
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -174,7 +181,7 @@ export default {
         API.BuscarEntidades(this.profissao, this.estado, this.cidade).then(
           (response) => {
             console.log(response.data);
-            this.exibirProfissao = true;
+            this.exibirProfissao = false;
             this.primeiraEtapa = 3;
             this.entidade = response.data[0].NomeFantasia;
             this.formBody.entidade = this.entidade;

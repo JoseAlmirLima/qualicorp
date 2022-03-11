@@ -1,11 +1,15 @@
 <template>
   <nav class="navbar navbar-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <div class="container">
+      <a class="navbar-brand" href="#"
+        ><img src="../assets/img/cropped-Logo_HomeQuali.png" alt=""
+      /></a>
+    </div>
   </nav>
 </template>
 
 <style scoped>
 nav {
-  background-color: #f3a603;
+  background-color: #171a88;
 }
 </style>

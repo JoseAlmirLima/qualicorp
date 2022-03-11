@@ -1,12 +1,17 @@
 <template>
-  <button>Próximo</button>
+  <button>
+    {{ texto }} <i class="fa fa-arrow-right ml-2" aria-hidden="true"></i>
+  </button>
 </template>
 
 <script>
 export default {
   name: "buttonVue",
   props: {
-    msg: String,
+    texto: {
+      type: String,
+      default: "Próximo",
+    },
   },
 };
 </script>
@@ -19,5 +24,9 @@ button {
   padding: 10px;
   color: white;
   position: inherit;
+  transition: 2s;
+}
+button:hover {
+  background: #28579c;
 }
 </style>
