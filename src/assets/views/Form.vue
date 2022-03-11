@@ -27,14 +27,14 @@
             @valor-profissao="getValorProfissao"
           />
         </div>
-        <div class="col-6 mt-3">
-          <InputVue />
-        </div>
-        <div class="col-6 mt-3">
-          <InputVue />
-        </div>
-        <div class="col-6 mt-3">
-          <InputVue />
+        <div v-if="!exibirProfissao" class="col-6 mt-3">
+          <label for="">Data de nascimento</label>
+          <input
+            id="date"
+            type="date"
+            v-model="formBody.datanascimento[0]"
+            class="inputData"
+          />
         </div>
       </div>
       <div class="row mt-3">
@@ -55,13 +55,11 @@
 <script>
 import API from "../../api/api.js";
 import cidades from "../../services/cidades.json";
-import InputVue from "../../components/Input.vue";
 import SelectVue from "../../components/Select.vue";
 import ButtonVue from "../../components/Button.vue";
 export default {
   name: "HelloWorld",
   components: {
-    InputVue,
     SelectVue,
     ButtonVue,
   },
@@ -71,6 +69,7 @@ export default {
   data: function () {
     return {
       bloquearCidade: true,
+      datanascimento: "",
       disabledButton: true,
       primeiraEtapa: 1,
       cidades: [],
@@ -84,7 +83,7 @@ export default {
         entidade: "",
         uf: "",
         cidade: "",
-        datanascimento: "",
+        datanascimento: [""],
       },
 
       estados: [
@@ -134,6 +133,7 @@ export default {
     proximaEtapa(e) {
       e.preventDefault();
       if (this.primeiraEtapa === 1) {
+        console.log(this.formBody);
         if (this.estado !== "" && this.cidade !== "") {
           API.BuscarProfissoes(this.estado, this.cidade).then((response) => {
             console.log(response.data);
@@ -153,7 +153,6 @@ export default {
             this.formBody.entidade = this.entidade;
             this.formBody.uf = this.estado;
             this.formBody.cidade = this.cidade;
-            this.formBody.datanascimento = ["1987-09-16"];
           }
         );
       }
@@ -207,5 +206,12 @@ label {
 .borderError {
   border: 1px solid red;
   border-radius: 10px;
+}
+input {
+  border: 1px solid #c5c5c5;
+  padding: 5px;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
 }
 </style>
