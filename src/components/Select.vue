@@ -4,7 +4,7 @@
       v-if="estado"
       name="select"
       class="w-100"
-      @change="teste"
+      @change="getValor"
       :value="dados"
     >
       <option v-for="(dados, item) in dados" :key="item">
@@ -15,7 +15,7 @@
       v-if="!estado && profissao === false"
       name="select"
       class="w-100"
-      @change="teste"
+      @change="getValor"
       :value="dados"
       :disabled="isDisabled"
       :class="{ active: isDisabled }"
@@ -28,7 +28,7 @@
       v-if="profissao"
       name="select"
       class="w-100"
-      @change="teste"
+      @change="getValor"
       :value="dados"
     >
       <option v-for="(dados, item) in dados" :key="item">
@@ -90,9 +90,10 @@ export default {
     };
   },
   methods: {
-    teste(e) {
+    getValor(e) {
       this.$emit("selectValor", e.target.value);
       this.$emit("valorCidade", e.target.value);
+      this.$emit("valorProfissao", e.target.value);
     },
   },
 };

@@ -21,7 +21,11 @@
         </div>
         <div v-if="exibirProfissao" class="col-6 mt-3">
           <label for="">Qual a sua formação ou cargo?</label>
-          <SelectVue :dados="profissoes" :profissao="true" />
+          <SelectVue
+            :dados="profissoes"
+            :profissao="true"
+            @valor-profissao="getValorProfissao"
+          />
         </div>
         <div class="col-6 mt-3">
           <InputVue />
@@ -68,13 +72,21 @@ export default {
     return {
       bloquearCidade: true,
       disabledButton: true,
-      primeiraEtapa: true,
+      primeiraEtapa: 1,
       cidades: [],
       profissoes: [],
+      entidade: "",
       profissao: "",
       estado: "",
       cidade: "",
       exibirProfissao: false,
+      formBody: {
+        entidade: "",
+        uf: "",
+        cidade: "",
+        datanascimento: "",
+      },
+
       estados: [
         { value: "AC", text: "Acre" },
         { value: "AL", text: "Alagoas" },
@@ -121,23 +133,34 @@ export default {
     },
     proximaEtapa(e) {
       e.preventDefault();
-      if (this.primeiraEtapa) {
+      if (this.primeiraEtapa === 1) {
         if (this.estado !== "" && this.cidade !== "") {
           API.BuscarProfissoes(this.estado, this.cidade).then((response) => {
             console.log(response.data);
             this.exibirProfissao = true;
             this.profissoes = response.data;
-            this.primeiraEtapa = false;
+            this.primeiraEtapa = 2;
           });
-        } else {
-          API.BuscarEntidades(this.profissao, this.estado, this.cidade).then(
-            (response) => {
-              console.log(response.data);
-              this.exibirProfissao = true;
-              this.profissoes = response.data;
-            }
-          );
         }
+      }
+      if (this.primeiraEtapa === 2) {
+        API.BuscarEntidades(this.profissao, this.estado, this.cidade).then(
+          (response) => {
+            console.log(response.data);
+            this.exibirProfissao = true;
+            this.primeiraEtapa = 3;
+            this.entidade = response.data[0].NomeFantasia;
+            this.formBody.entidade = this.entidade;
+            this.formBody.uf = this.estado;
+            this.formBody.cidade = this.cidade;
+            this.formBody.datanascimento = ["1987-09-16"];
+          }
+        );
+      }
+      if (this.primeiraEtapa === 3) {
+        API.FazerCotacao(this.formBody).then((response) => {
+          console.log(response);
+        });
       }
     },
   },

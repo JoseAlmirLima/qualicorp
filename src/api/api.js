@@ -21,4 +21,16 @@ export default {
       }
     );
   },
+  FazerCotacao: (dados) => {
+    return http.post(
+      "plano-resumido?api-key=b9104723-af51-47d0-ba4e-cbeb1e1cb57d",
+      dados,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.token,
+        },
+      }
+    );
+  },
 };
